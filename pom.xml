@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.melilogin</groupId>
+	<artifactId>demo</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>demo</name>
+	<description>Demo project for Spring Boot</description>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+<!-- 		<version>2.0.3.RELEASE</version> -->
+		<version>1.5.1.RELEASE</version>
+
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
+
+	<profiles>
+		<profile>
+			<id>local</id>
+			<!-- Localhost -->
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<BASE_API_URL>http://localhost:13000/api</BASE_API_URL>
+				<!-- <catalina.base>${basedir}</catalina.base> <meliAppId>1158642842496424</meliAppId> 
+					<meliSecretKey>anSpSxcp1pFpGl7PINtwPSd2MLy6vkmD</meliSecretKey> <meliRedirectUri>http://localhost:8080/authorize</meliRedirectUri> 
+					<passwordEncrypted>false</passwordEncrypted> -->
+			</properties>
+		</profile>
+	</profiles>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+		<mercadolibre-sdk.version>0.0.2-SNAPSHOT</mercadolibre-sdk.version>
+		<junit.version>4.12</junit.version>
+		<jackson.version>2.9.5</jackson.version>
+		<httpclient.version>4.5</httpclient.version>
+		<gson.version>2.2</gson.version>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>mercadolibre-snapshots</id>
+			<url>https://github.com/mercadolibre/java-sdk-repo/raw/master/snapshots</url>
+		</repository>
+	</repositories>
+
+	<!-- <dependencyManagement> -->
+	<dependencies>
+		<dependency>
+			<groupId>com.mercadolibre</groupId>
+			<artifactId>sdk</artifactId>
+			<version>${mercadolibre-sdk.version}</version>
+<!-- 			<exclusions> -->
+<!-- 				<exclusion> -->
+<!-- 					<groupId>com.google.code.gson</groupId> -->
+<!-- 					<artifactId>gson</artifactId> -->
+<!-- 				</exclusion> -->
+<!-- 			</exclusions> -->
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<!-- <version>5.0.7.RELEASE</version> -->
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<!-- <version>${junit.version}</version> -->
+			<scope>test</scope>
+		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>javax.validation</groupId> -->
+<!-- 			<artifactId>validation-api</artifactId> -->
+<!-- 			<version>2.0.1.Final</version> -->
+<!-- 		</dependency> -->
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<!-- <version>1.16.6</version> -->
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- Jackson -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<!-- <version>${jackson.version}</version> -->
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-joda</artifactId>
+			<!-- <version>${jackson.version}</version> -->
+		</dependency>
+		<!-- Transactional & propagation annotations -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<!-- <version>${spring.version}</version> -->
+			<exclusions>
+				<exclusion>
+					<artifactId>commons-logging</artifactId>
+					<groupId>commons-logging</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<!-- <version>${httpclient.version}</version> -->
+		</dependency>
+
+		<!-- Spring annotations - context -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+<!-- 			<version>${spring.version}</version> -->
+			<exclusions>
+				<!-- Exclude Commons Logging in favor of SLF4j -->
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency>
+
+	</dependencies>
+	<!-- </dependencyManagement> -->
+
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>**/*.properties</include>
+				</includes>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+
+</project>

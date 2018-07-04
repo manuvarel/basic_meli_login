@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+
+	<!-- Scans within the base package of the application for @Components to 
+		configure as beans -->
+	<!-- @Controller, @Service, @Configuration, etc. -->
+	<context:component-scan
+		base-package="com.melilogin.demo.common.api.dao" />
+	<!-- <context:component-scan -->
+	<!-- base-package="com.meli.mailing.api" /> -->
+	<context:annotation-config />
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<!-- <value>classpath:/properties/database.properties</value> -->
+				<value>classpath:/application.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- Database Configuration <import resource="database/DataSource.xml" /> 
+		<import resource="database/Hibernate.xml" /> -->
+	<bean id="meli" class="com.mercadolibre.sdk.Meli">
+		<constructor-arg type="Long" value="${meli.app.id}" />
+		<constructor-arg type="String"
+			value="${meli.secret.key}" />
+	</bean>
+	    <!-- HttpClient Configuration - Start -->
+    <bean id="socketConfig" class="org.apache.http.config.SocketConfig" factory-method="custom">
+        <property name="soTimeout" value="${socket.timeout}" />
+        <property name="soLinger" value="${socket.linger}" />
+    </bean>
+
+    <bean name="connectionManager" class="org.apache.http.impl.conn.PoolingHttpClientConnectionManager">
+        <property name="maxTotal" value="${max.total}" />
+        <property name="defaultMaxPerRoute" value="${default.max.per.route}" />
+        <property name="defaultSocketConfig">
+            <bean factory-bean="socketConfig" factory-method="build" />
+        </property>
+    </bean>
+    <!-- HttpClient Configuration - End -->
+
+</beans>

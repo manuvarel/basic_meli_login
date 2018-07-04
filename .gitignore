@@ -1,0 +1,17 @@
+# Logs
+logs
+*.log
+
+# Maven
+target
+
+# Eclipse - idea - IDE
+.classpath
+.project
+.settings/
+.idea/
+*.iml
+
+# src/main/resources/static/ui-build
+# src/main/resources/static/ui-dist
+
