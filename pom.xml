@@ -15,7 +15,6 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-<!-- 		<version>2.0.3.RELEASE</version> -->
 		<version>1.5.1.RELEASE</version>
 
 		<relativePath /> <!-- lookup parent from repository -->
@@ -33,6 +32,14 @@
 				<!-- <catalina.base>${basedir}</catalina.base> <meliAppId>1158642842496424</meliAppId> 
 					<meliSecretKey>anSpSxcp1pFpGl7PINtwPSd2MLy6vkmD</meliSecretKey> <meliRedirectUri>http://localhost:8080/authorize</meliRedirectUri> 
 					<passwordEncrypted>false</passwordEncrypted> -->
+				<DB_HOST>localhost</DB_HOST>
+
+				<database.name>mlLogin</database.name>
+				<mysql-connector.version>5.1.35</mysql-connector.version>
+				<dataSource.driverClassName>com.mysql.jdbc.Driver</dataSource.driverClassName>
+				<dataSource.jdbcURL>jdbc:mysql://${DB_HOST}:3306/${database.name}?createDatabaseIfNotExist=true</dataSource.jdbcURL>
+				<dataSource.user>loginUser</dataSource.user>
+				<dataSource.password>loginUser</dataSource.password>
 			</properties>
 		</profile>
 	</profiles>
@@ -61,12 +68,6 @@
 			<groupId>com.mercadolibre</groupId>
 			<artifactId>sdk</artifactId>
 			<version>${mercadolibre-sdk.version}</version>
-<!-- 			<exclusions> -->
-<!-- 				<exclusion> -->
-<!-- 					<groupId>com.google.code.gson</groupId> -->
-<!-- 					<artifactId>gson</artifactId> -->
-<!-- 				</exclusion> -->
-<!-- 			</exclusions> -->
 		</dependency>
 
 		<dependency>
@@ -82,7 +83,6 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
-			<!-- <version>5.0.7.RELEASE</version> -->
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -90,12 +90,7 @@
 			<!-- <version>${junit.version}</version> -->
 			<scope>test</scope>
 		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>javax.validation</groupId> -->
-<!-- 			<artifactId>validation-api</artifactId> -->
-<!-- 			<version>2.0.1.Final</version> -->
-<!-- 		</dependency> -->
-
+	
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -136,7 +131,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-<!-- 			<version>${spring.version}</version> -->
+			<!-- <version>${spring.version}</version> -->
 			<exclusions>
 				<!-- Exclude Commons Logging in favor of SLF4j -->
 				<exclusion>
@@ -151,26 +146,58 @@
 			<artifactId>log4j</artifactId>
 			<version>1.2.17</version>
 		</dependency>
+		<dependency>
+			<groupId>org.liquibase</groupId>
+			<artifactId>liquibase-core</artifactId>
+		</dependency>
 
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql-connector.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>${httpclient.version}</version>
+		</dependency>
 	</dependencies>
 	<!-- </dependencyManagement> -->
 
 	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<addResources>false</addResources>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.liquibase</groupId>
+				<artifactId>liquibase-maven-plugin</artifactId>
+				<configuration>
+					<changeLogFile>liquibase/ml-login-master.xml</changeLogFile>
+					<driver>${dataSource.driverClassName}</driver>
+					<url>${dataSource.jdbcURL}</url>
+					<username>${dataSource.user}</username>
+					<password>${dataSource.password}</password>
+					<dropFirst>false</dropFirst>
+					<verbose>true</verbose>
+				</configuration>
+			</plugin>
+		</plugins>
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
 				<filtering>true</filtering>
 				<includes>
 					<include>**/*.properties</include>
+					<include>**/*.xml</include>
 				</includes>
 			</resource>
 		</resources>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
 	</build>
 
 
