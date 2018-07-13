@@ -2,15 +2,15 @@ package com.melilogin.demo.data.api.implementations;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.melilogin.demo.common.api.dao.interfaces.MeliDAO;
 import com.melilogin.demo.common.api.mercadolibre.entities.MeliAccessToken;
+import com.melilogin.demo.common.api.mercadolibre.entities.MeliUser;
 import com.melilogin.demo.data.api.interfaces.APIMeliService;
+import com.melilogin.demo.webservices.exceptions.HttpStatusException;
 
-@Transactional
+//@Transactional
 @Service
 public class APIMeliServiceImpl implements APIMeliService {
     private static final String HAS_DEBT = "has_debt";
@@ -24,10 +24,10 @@ public class APIMeliServiceImpl implements APIMeliService {
         this.meliDAO = meliDAO;
     }
 
-//    @Override
-//    public MeliUser getMe(String accessToken) throws HttpStatusException {
-//        return meliDAO.getMe(accessToken);
-//    }
+    @Override
+    public MeliUser getMe(String accessToken) throws HttpStatusException {
+        return meliDAO.getMe(accessToken);
+    }
 //    
 //    @Override
 //    public MeliUser getMeInternal(Long shopId) throws HttpStatusException {

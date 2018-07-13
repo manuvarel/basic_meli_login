@@ -1,4 +1,4 @@
-package com.melilogin.webservices.exceptions;
+package com.melilogin.demo.webservices.exceptions;
 
 public class HttpStatusException extends Exception {
     private static final long serialVersionUID = -8688416654466199073L;

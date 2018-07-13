@@ -1,10 +1,12 @@
 package com.melilogin.demo.common.api.dao.interfaces;
 
 import com.melilogin.demo.common.api.mercadolibre.entities.MeliAccessToken;
+import com.melilogin.demo.common.api.mercadolibre.entities.MeliUser;
+import com.melilogin.demo.webservices.exceptions.HttpStatusException;
 
 public interface MeliDAO {
 
-//    public MeliUser getMe(String accessToken) throws HttpStatusException;
+    public MeliUser getMe(String accessToken) throws HttpStatusException;
 
     public MeliAccessToken getAccessToken(String authorizationCode);// throws HttpAuthenticationException;
 

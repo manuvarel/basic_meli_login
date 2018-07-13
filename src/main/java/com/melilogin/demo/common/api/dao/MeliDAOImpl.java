@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 //import com.google.gson.Gson;
 import com.melilogin.demo.common.api.dao.interfaces.MeliDAO;
 import com.melilogin.demo.common.api.mercadolibre.entities.MeliAccessToken;
+import com.melilogin.demo.common.api.mercadolibre.entities.MeliUser;
+import com.melilogin.demo.webservices.exceptions.HttpStatusException;
 import com.mercadolibre.sdk.AuthorizationFailure;
 import com.mercadolibre.sdk.Meli;
 import com.mercadolibre.sdk.MeliException;
@@ -70,19 +72,19 @@ public class MeliDAOImpl extends BaseApiDAOImpl implements MeliDAO {
         meli = new Meli(Long.valueOf(meliAppId), meliSecretKey);
     }
 
-//    @Override
-//    public MeliUser getMe(String accessToken) throws HttpStatusException {
-//        Map<String, String> parameters = new HashMap<String, String>();
-//        String url = String.format(ML_USER_ME, encryption.decrypt(accessToken));
-//        MeliUser meliUser = sendHttpGetMethod(url, parameters, MeliUser.class);
-//
-//        if (meliUser.getEmail() == null) {
-//            url = String.format(ML_USER, meliUser.getId(), encryption.decrypt(accessToken));
-//            meliUser = sendHttpGetMethod(url, parameters, MeliUser.class);
-//        }
-//
-//        return meliUser;
-//    }
+    @Override
+    public MeliUser getMe(String accessToken) throws HttpStatusException {
+        Map<String, String> parameters = new HashMap<String, String>();
+        String url = String.format(ML_USER_ME, accessToken);
+        MeliUser meliUser = sendHttpGetMethod(url, parameters, MeliUser.class);
+
+        if (meliUser.getEmail() == null) {
+            url = String.format(ML_USER, meliUser.getId(),accessToken);
+            meliUser = sendHttpGetMethod(url, parameters, MeliUser.class);
+        }
+
+        return meliUser;
+    }
 //    
 //    @Override
 //    public MeliUser getMeInternal(Long shopId) throws HttpStatusException {
@@ -103,6 +105,7 @@ public class MeliDAOImpl extends BaseApiDAOImpl implements MeliDAO {
     @Override
     public MeliAccessToken getAccessToken(String authorizationCode) {// throws HttpAuthenticationException {
         try {
+//            String redirectUrl = meli.getAuthUrl("http://localhost:8080/meli/authorize");//("http://somecallbackurl",Meli.apiUrl); //Don't forget to set the autentication URL of your country
             meli.authorize(authorizationCode, meliRedirectUri);
         } catch (AuthorizationFailure e) {
             log.warn("A AuthorizationFailure from MeLi has been thrown " + e.getMessage());
@@ -110,6 +113,7 @@ public class MeliDAOImpl extends BaseApiDAOImpl implements MeliDAO {
         }
 
         MeliAccessToken meliAccessToken = MeliAccessToken.builder().refreshToken(meli.getRefreshToken()).expiresIn(ML_EXPIRE_TIME).build();
+        meliAccessToken.setAccessToken(meli.getAccessToken());
 //        meliAccessToken.setAccessToken(encryption.encrypt(meli.getAccessToken()));
         return meliAccessToken;
     }

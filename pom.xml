@@ -53,6 +53,7 @@
 		<jackson.version>2.9.5</jackson.version>
 		<httpclient.version>4.5</httpclient.version>
 		<gson.version>2.2</gson.version>
+		<guava.version>18.0</guava.version>
 	</properties>
 
 	<repositories>
@@ -84,17 +85,21 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<!-- <version>${junit.version}</version> -->
 			<scope>test</scope>
 		</dependency>
-	
+
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<!-- <version>1.16.6</version> -->
 			<scope>provided</scope>
 		</dependency>
 
@@ -102,18 +107,15 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>
-			<!-- <version>${jackson.version}</version> -->
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.datatype</groupId>
 			<artifactId>jackson-datatype-joda</artifactId>
-			<!-- <version>${jackson.version}</version> -->
 		</dependency>
 		<!-- Transactional & propagation annotations -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
-			<!-- <version>${spring.version}</version> -->
 			<exclusions>
 				<exclusion>
 					<artifactId>commons-logging</artifactId>
@@ -124,14 +126,12 @@
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
-			<!-- <version>${httpclient.version}</version> -->
 		</dependency>
 
 		<!-- Spring annotations - context -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<!-- <version>${spring.version}</version> -->
 			<exclusions>
 				<!-- Exclude Commons Logging in favor of SLF4j -->
 				<exclusion>
@@ -154,13 +154,17 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>${mysql-connector.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
-			<version>${httpclient.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>${guava.version}</version>
 		</dependency>
 	</dependencies>
 	<!-- </dependencyManagement> -->

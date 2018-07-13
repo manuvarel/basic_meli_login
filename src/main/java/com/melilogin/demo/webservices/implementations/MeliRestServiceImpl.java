@@ -4,10 +4,12 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.melilogin.demo.common.api.mercadolibre.entities.MeliAccessToken;
 import com.melilogin.demo.services.interfaces.MeliService;
+import com.melilogin.demo.webservices.exceptions.HttpStatusException;
 import com.melilogin.demo.webservices.interfaces.MeliRestService;
 
 @RestController
@@ -30,12 +32,12 @@ public class MeliRestServiceImpl implements MeliRestService {
     }
 
     @Override
-    public MeliAccessToken getAccessToken(@RequestHeader(value = "authorizationCode", required = true) String authorizationCode) {// throws HttpStatusException {
-        return meliService.getAccessToken(authorizationCode);
+    public MeliAccessToken getAccessToken(@RequestParam String code) throws HttpStatusException {
+        return meliService.getAccessToken(code);
     }
 
     @Override
-    public MeliAccessToken getAccessTokenFromRefreshToken(@RequestHeader(value = "refreshToken", required = true) String refreshToken) {// throws HttpStatusException {
+    public MeliAccessToken getAccessTokenFromRefreshToken(@RequestHeader(value = "refreshToken", required = true) String refreshToken) throws HttpStatusException {
         return meliService.getAccessTokenFromRefreshToken(refreshToken);
     }
 }

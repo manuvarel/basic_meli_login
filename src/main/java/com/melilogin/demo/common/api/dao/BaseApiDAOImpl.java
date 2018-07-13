@@ -26,8 +26,9 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
-//import com.google.gson.Gson;
-//import com.google.gson.GsonBuilder;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.melilogin.demo.webservices.exceptions.HttpStatusException;
 
 public class BaseApiDAOImpl {
 
@@ -42,16 +43,16 @@ public class BaseApiDAOImpl {
 
     @Autowired
     private HttpClient httpClient;
-    
-//    @Autowired
-//    private Gson gson;
 
-//    public BaseApiDAOImpl() {
-//        httpClient = HttpClientBuilder.create().setConnectionManager(connectionManager).setConnectionManagerShared(true).build();
-//    }
+    @Autowired
+    private Gson gson;
 
-//    @Autowired
-//    private PoolingHttpClientConnectionManager connectionManager;
+    public BaseApiDAOImpl() {
+        httpClient = HttpClientBuilder.create().setConnectionManager(connectionManager).setConnectionManagerShared(true).build();
+    }
+
+    @Autowired
+    private PoolingHttpClientConnectionManager connectionManager;
 
     /**
      * Used for GET operations
@@ -83,18 +84,18 @@ public class BaseApiDAOImpl {
             if (statusCode == HttpStatus.SERVICE_UNAVAILABLE.value() || statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()
                     || statusCode == HttpStatus.BAD_GATEWAY.value()) {
                 log.warn("The Mercado libre API is unavailable. StatusCode " + statusCode);
-//                throw new HttpServiceUnavailable(HttpError.SERVICE_UNAVAILABLE);
+                // throw new HttpServiceUnavailable(HttpError.SERVICE_UNAVAILABLE);
             } else if (statusCode == HttpStatus.UNAUTHORIZED.value()) {
                 log.info("unauthorized Access Token to the Mercado Libre API");
-//                throw new HttpAuthenticationException(HttpError.UNAUTHORIZED_MERCADO_LIBRE);
+                // throw new HttpAuthenticationException(HttpError.UNAUTHORIZED_MERCADO_LIBRE);
             } else if (statusCode == HttpStatus.BAD_REQUEST.value()) {
                 log.error("Bad Request to the Mercado Libre API");
-//                throw new HttpAuthenticationException(HttpError.UNAUTHORIZED_MERCADO_LIBRE);
+                // throw new HttpAuthenticationException(HttpError.UNAUTHORIZED_MERCADO_LIBRE);
             } else if (statusCode == HttpStatus.NOT_FOUND.value()) {
-//                throw new HttpContentNotFoundException(HttpError.CONTENT_NOT_FOUND);
+                // throw new HttpContentNotFoundException(HttpError.CONTENT_NOT_FOUND);
             } else {
                 log.error(String.format("There has been an error with Mercado Libre API. StatusCode: %s. Response: %s", statusCode, statusCode));
-//                throw new HttpAuthenticationException(HttpError.UNAUTHORIZED_MERCADO_LIBRE);
+                // throw new HttpAuthenticationException(HttpError.UNAUTHORIZED_MERCADO_LIBRE);
             }
         }
         return statusCode;
@@ -109,28 +110,28 @@ public class BaseApiDAOImpl {
         try {
             log.debug(format(RESPONSE_LOG_FORMAT, statusCode, responseBody));
 
-//            Gson gson;
-//            if (dateFormat != null) {
-//                gson = new GsonBuilder().setDateFormat(dateFormat).create();
-//            } else {
-//                gson = new Gson();
-//            }
+            Gson gson;
+            if (dateFormat != null) {
+                gson = new GsonBuilder().setDateFormat(dateFormat).create();
+            } else {
+                gson = new Gson();
+            }
 
-//            entity = gson.fromJson(responseBody, clazz);
+            entity = gson.fromJson(responseBody, clazz);
         } catch (Exception jse) {
             log.error("RESPONSE status code = " + statusCode);
             log.error(format("RESPONSE Status: %s", statusCode, responseBody));
-//            throw new HttpServiceUnavailable(HttpError.SERVICE_UNAVAILABLE);
+            // throw new HttpServiceUnavailable(HttpError.SERVICE_UNAVAILABLE);
         }
         return entity;
     }
 
-    protected <T> T sendHttpGetMethod(String url, Map<String, String> parameters, Class<T> clazz) {//throws HttpStatusException {
+    protected <T> T sendHttpGetMethod(String url, Map<String, String> parameters, Class<T> clazz) throws HttpStatusException {
         return sendHttpGetMethod(url, parameters, null, clazz, null);
     }
 
     protected <T> T sendHttpGetMethod(String url, Map<String, String> parameters, Map<String, String> headers, Class<T> clazz, String dateFormat)
-    {//  throws HttpStatusException {
+            throws HttpStatusException {
         HttpGet request = null;
 
         T entity = null;
@@ -163,10 +164,10 @@ public class BaseApiDAOImpl {
 
         } catch (IOException e) {
             log.error("An IOException has been thrown when getting GET object from " + url + ". " + e.getMessage());
-//            throw new HttpServiceUnavailable(HttpError.SERVICE_UNAVAILABLE);
+            // throw new HttpServiceUnavailable(HttpError.SERVICE_UNAVAILABLE);
         } catch (URISyntaxException e) {
             log.error("An URISyntaxException has been thrown when getting GET object from " + url + ". " + e.getMessage());
-//            throw new HttpServiceUnavailable(HttpError.SERVICE_UNAVAILABLE);
+            // throw new HttpServiceUnavailable(HttpError.SERVICE_UNAVAILABLE);
         } finally {
             if (request != null) {
                 request.releaseConnection();
@@ -200,7 +201,7 @@ public class BaseApiDAOImpl {
 
         } catch (IOException e) {
             log.error("An IOException has been thrown when getting POST object from " + url + ". " + e.getMessage());
-//            throw new HttpServiceUnavailable(HttpError.SERVICE_UNAVAILABLE);
+            // throw new HttpServiceUnavailable(HttpError.SERVICE_UNAVAILABLE);
         } finally {
             if (request != null) {
                 request.releaseConnection();
@@ -238,7 +239,7 @@ public class BaseApiDAOImpl {
 
         } catch (IOException e) {
             log.error("An IOException has been thrown when getting POST object from " + url + ". " + e.getMessage());
-//            throw new HttpServiceUnavailable(HttpError.SERVICE_UNAVAILABLE);
+            // throw new HttpServiceUnavailable(HttpError.SERVICE_UNAVAILABLE);
         } finally {
             if (request != null) {
                 request.releaseConnection();
@@ -247,7 +248,7 @@ public class BaseApiDAOImpl {
         return response;
     }
 
-    protected <T> T sendHttpPostMethodWithJson(String url, Object objectToSend, Map<String, String> headers, Class<T> clazz) {//throws HttpStatusException {
+    protected <T> T sendHttpPostMethodWithJson(String url, Object objectToSend, Map<String, String> headers, Class<T> clazz) {// throws HttpStatusException {
         HttpPost request = null;
 
         T entity = null;
@@ -263,9 +264,9 @@ public class BaseApiDAOImpl {
                 }
             }
 
-//            String json = new Gson().toJson(objectToSend); // convert your pojo to json
-//            StringEntity postingString = new StringEntity(json, UTF_8);
-//            request.setEntity(postingString);
+            String json = new Gson().toJson(objectToSend); // convert your pojo to json
+            StringEntity postingString = new StringEntity(json, UTF_8);
+            request.setEntity(postingString);
             request.setHeader("Content-type", APPLICATION_JSON_HEADER);
             log.debug("REQUEST Header: Content-type:application/json");
             log.debug(format(REQUEST_LOG_FORMAT, request.getMethod(), request.getRequestLine() == null ? "" : request.getRequestLine().getUri(),
@@ -279,7 +280,7 @@ public class BaseApiDAOImpl {
 
         } catch (IOException e) {
             log.error("An IOException has been thrown when getting POST object from " + url + ". " + e.getMessage());
-//            throw new HttpServiceUnavailable(HttpError.SERVICE_UNAVAILABLE);
+            // throw new HttpServiceUnavailable(HttpError.SERVICE_UNAVAILABLE);
         } finally {
             if (request != null) {
                 request.releaseConnection();
@@ -288,7 +289,7 @@ public class BaseApiDAOImpl {
         return entity;
     }
 
-    protected <T> T sendHttpDeleteMethod(String url, Map<String, String> parameters, Class<T> clazz) {//throws HttpStatusException {
+    protected <T> T sendHttpDeleteMethod(String url, Map<String, String> parameters, Class<T> clazz) {// throws HttpStatusException {
         HttpDelete request = null;
 
         T entity = null;
@@ -313,10 +314,10 @@ public class BaseApiDAOImpl {
 
         } catch (IOException e) {
             log.error("An IOException has been thrown when getting POST object from " + url + ". " + e.getMessage());
-//            throw new HttpServiceUnavailable(HttpError.SERVICE_UNAVAILABLE);
+            // throw new HttpServiceUnavailable(HttpError.SERVICE_UNAVAILABLE);
         } catch (URISyntaxException e) {
             log.error("An URISyntaxException has been thrown when sending a DELETE method from " + url + ". " + e.getMessage());
-//            throw new HttpServiceUnavailable(HttpError.SERVICE_UNAVAILABLE);
+            // throw new HttpServiceUnavailable(HttpError.SERVICE_UNAVAILABLE);
         } finally {
             if (request != null) {
                 request.releaseConnection();

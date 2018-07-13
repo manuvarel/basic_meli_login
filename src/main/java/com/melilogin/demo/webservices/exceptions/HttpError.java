@@ -1,4 +1,4 @@
-package com.melilogin.webservices.exceptions;
+package com.melilogin.demo.webservices.exceptions;
 
 public enum HttpError {
     BAD_REQUEST_HEADER("mailing.field.missing"),
